@@ -55,32 +55,32 @@ const props = defineProps({
 //   },
 // ]
 
-const filteredEvents = computed(() => 
-    props.events.filter(event =>
-        event.name.toLowerCase().includes(search.value.toLowerCase()) ||
-        (event.category && event.category.name && 
-         event.category.name.toLowerCase().includes(search.value.toLowerCase()))
-    )
-);
+// const filteredEvents = computed(() => 
+//     props.events.filter(event =>
+//         event.name.toLowerCase().includes(search.value.toLowerCase()) ||
+//         (event.category && event.category.name && 
+//          event.category.name.toLowerCase().includes(search.value.toLowerCase()))
+//     )
+// );
 
-watch(filteredEvents, () => {
-    currentIndex.value = 0;
-}, { deep: true });
+// watch(filteredEvents, () => {
+//     currentIndex.value = 0;
+// }, { deep: true });
 
 const nextImage = () => {
-    if (filteredEvents.value.length > 0) {
-        currentIndex.value = (currentIndex.value + 1) % filteredEvents.value.length
+    if (props.events && props.events.length > 0) {
+        currentIndex.value = (currentIndex.value + 1) % props.events.length
     }
 }
 
 const prevImage = () => {
-    if (filteredEvents.value.length > 0) {
-        currentIndex.value = (currentIndex.value - 1 + filteredEvents.value.length) % filteredEvents.value.length
+    if (props.events && props.events.length > 0) {
+        currentIndex.value = (currentIndex.value - 1 + props.events.length) % props.events.length
     }
 }
 
 const goToImage = (index) => {
-    if (filteredEvents.value.length > 0) {
+    if (props.events && props.events.length > 0) {
         currentIndex.value = index
     }
 }
@@ -109,63 +109,50 @@ const getImageUrl = (imagePath) => {
     <Head title="Inicio" />
     <Navbar />
     
-    <div class="w-full max-w-4xl mx-auto mt-6">
-        <div class="mb-4">
-            <input 
-                type="text" 
-                v-model="search" 
-                placeholder="Buscar eventos..." 
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-        </div>
-    </div>
-    
-    <div v-if="filteredEvents.length > 0" class="w-full max-w-4xl mx-auto mt-4">
-        <div class="relative overflow-hidden rounded-xl shadow-lg">
-            <img
-                :src="getImageUrl(filteredEvents[currentIndex].image)"
-                :alt="filteredEvents[currentIndex].name"
-                class="w-full h-64 object-cover transition-all duration-500"
-            />
+    <div class="w-full max-w-4xl mx-auto mt-10">
+        <template v-if="props.events && props.events.length > 0">
+            <div class="relative overflow-hidden rounded-xl shadow-lg">
+                <img
+                    :src="getImageUrl(props.events[currentIndex].image)"
+                    :alt="props.events[currentIndex].name"
+                    class="w-full h-64 object-cover transition-all duration-500"
+                />
 
-            <div class="absolute bottom-0 w-full bg-black bg-opacity-50 text-white p-4">
-                <div class="text-center text-lg font-semibold">
-                    {{ filteredEvents[currentIndex].name }} - {{ filteredEvents[currentIndex].category.name }}
+                <div class="absolute bottom-0 w-full bg-black bg-opacity-50 text-white p-4">
+                    <div class="text-center text-lg font-semibold">
+                        {{ props.events[currentIndex].name }} - {{ props.events[currentIndex].category.name }}
+                    </div>
                 </div>
-                <!-- <div class="flex justify-center items-center mt-2">
-                    <button @click="toggleAutoplay" 
-                            class="text-white text-sm px-3 py-1 rounded-full bg-gray-800 bg-opacity-50 hover:bg-opacity-75">
-                        {{ isPaused ? '▶' : '⏸' }}
-                    </button>
-                </div> -->
+
+                <button @click="prevImage"
+                    class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
+                    ‹
+                </button>
+
+                <button @click="nextImage"
+                    class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
+                    ›
+                </button>
+
+                <div class="flex justify-center mt-4 space-x-2">
+                    <span
+                        v-for="(event, index) in props.events"
+                        :key="event.id"
+                        @click="goToImage(index)"
+                        class="w-3 h-3 rounded-full cursor-pointer transition-all duration-300"
+                        :class="{
+                            'bg-gray-800': index === currentIndex,
+                            'bg-gray-400': index !== currentIndex
+                        }"
+                    />
+                </div>
             </div>
-
-            <button @click="prevImage"
-                class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
-                ‹
-            </button>
-
-            <button @click="nextImage"
-                class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
-                ›
-            </button>
-        </div>
-
-        <div class="flex justify-center mt-4 space-x-2">
-            <span
-                v-for="(event, index) in filteredEvents"
-                :key="event.id"
-                @click="goToImage(index)"
-                class="w-3 h-3 rounded-full cursor-pointer transition-all duration-300"
-                :class="{
-                    'bg-gray-800': index === currentIndex,
-                    'bg-gray-400': index !== currentIndex
-                }"
-            />
-        </div>
-    </div>
-    <div v-else class="w-full max-w-4xl mx-auto mt-10 text-center text-gray-600">
-        {{ props.events && props.events.length > 0 ? 'No se encontraron eventos con ese criterio de búsqueda' : 'No hay eventos disponibles' }}
+        </template>
+        <template v-else>
+            <div class="text-center text-gray-600">
+                No hay eventos disponibles
+            </div>
+        </template>
     </div>
 </template>
   
