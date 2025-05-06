@@ -1,5 +1,12 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const isOpen = ref(false);
+
+const toggleMenu = () => {
+    isOpen.value = !isOpen.value;
+};
 </script>
 
 <template>
@@ -29,11 +36,40 @@ import { Link } from '@inertiajs/vue3';
                         </div>
                     </div>
                 </div>
+
+                <!-- Botón hamburguesa -->
+                <div class="md:hidden">
+                    <button @click="toggleMenu" 
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none">
+                        <svg class="h-6 w-6" 
+                             :class="{'hidden': isOpen, 'block': !isOpen }"
+                             stroke="currentColor" 
+                             fill="none" 
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" 
+                                  stroke-linejoin="round" 
+                                  stroke-width="2" 
+                                  d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="h-6 w-6" 
+                             :class="{'block': isOpen, 'hidden': !isOpen }"
+                             stroke="currentColor" 
+                             fill="none" 
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" 
+                                  stroke-linejoin="round" 
+                                  stroke-width="2" 
+                                  d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Menú móvil -->
-        <div class="md:hidden">
+        <div class="md:hidden"
+             :class="{'block': isOpen, 'hidden': !isOpen}"
+             @click="isOpen = false">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <Link
                     href="/events"
@@ -50,4 +86,11 @@ import { Link } from '@inertiajs/vue3';
             </div>
         </div>
     </nav>
-</template> 
+</template>
+
+<style scoped>
+/* Transiciones para el menú móvil */
+.md\:hidden {
+    transition: all 0.3s ease-in-out;
+}
+</style> 

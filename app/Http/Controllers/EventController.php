@@ -43,7 +43,7 @@ class EventController extends Controller
             "name" => "required|max:255",
             "date" => "required|max:255",
             "category_id" => "required|max:255",
-            "image" => "mimes:jpeg,png,jpg,gif|max:2048"
+            "image" => "mimes:jpeg,png,jpg,gif,mp3,mp4|max:20048"
         ]);
 
         //dd($validate);
@@ -53,7 +53,10 @@ class EventController extends Controller
             $validate['image'] = $image;
         };
 
-        //dd($validate);
+        if($request->hasFile('audio')) {
+            $audio = $request->file('audio')->store('event', 'public');
+            $validate['image'] = $audio;
+        }
 
         Event::create($validate);
         return redirect()->route('events.index');

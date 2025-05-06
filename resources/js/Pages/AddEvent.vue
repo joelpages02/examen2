@@ -29,9 +29,14 @@
         <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
           Imagen del Evento
         </label>
-        <input type="file" id="image" @input="handleImageChange" class="w-full border p-2 rounded" accept="image/*" />
+        <input type="file" id="image" @input="handleImageChange" class="w-full border p-2 rounded" accept="image/*, audio/*" />
         <div class="p-2 text-left">
           <img v-if="previewImage" class="w-20" :src="previewImage" :alt="form.name">
+          
+          <audio v-if="previewAudio" class="w-full mt-2" controls>
+            <source :src="previewAudio" />
+            Tu navegador no soporta el elemento de audio.
+          </audio>
         </div>
       </div>
       <div class="flex items-center justify-between">
@@ -54,6 +59,7 @@ const props = defineProps({
 })
 
 const previewImage = ref(null);
+const previewAudio = ref(null);
 
 const categories = props.categories || [];
 
@@ -69,9 +75,19 @@ const handleImageChange = (event) => {
   form.image = file;
 
   if (file) {
-    previewImage.value = URL.createObjectURL(file);
+    const type = file.type;
+
+    if (type.startsWith('image/')) {
+      previewImage.value = URL.createObjectURL(file);
+      previewAudio.value = null;
+    }
+    // Si es audio
+    else if (type.startsWith('audio/')) {
+      previewAudio.value = URL.createObjectURL(file);
+      previewImage.value = null;
+    }
   }
-};
+  };
 
 function submit() {
   form.post(route('events.store'), {
