@@ -1,11 +1,13 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import Navbar from '@/Components/Navbar.vue';
 
 const currentIndex = ref(0)
+// let interval = null
 const autoplayInterval = ref(null)
 const isPaused = ref(false)
+const search = ref('')
 
 const props = defineProps({
     events: Array,
@@ -35,20 +37,50 @@ const props = defineProps({
 //     }
 // }
 
+// const events = [
+//   {
+//     name: 'Evento 1',
+//     category: { name: 'Música' },
+//     image: '/images/events/evento1.jpg',
+//   },
+//   {
+//     name: 'Evento 2',
+//     category: { name: 'Arte' },
+//     image: '/images/events/evento2.jpg',
+//   },
+//   {
+//     name: 'Evento 3',
+//     category: { name: 'Deporte' },
+//     image: '/images/events/evento3.jpg',
+//   },
+// ]
+
+const filteredEvents = computed(() => 
+    props.events.filter(event =>
+        event.name.toLowerCase().includes(search.value.toLowerCase()) ||
+        (event.category && event.category.name && 
+         event.category.name.toLowerCase().includes(search.value.toLowerCase()))
+    )
+);
+
+watch(filteredEvents, () => {
+    currentIndex.value = 0;
+}, { deep: true });
+
 const nextImage = () => {
-    if (props.events.length > 0) {
-        currentIndex.value = (currentIndex.value + 1) % props.events.length
+    if (filteredEvents.value.length > 0) {
+        currentIndex.value = (currentIndex.value + 1) % filteredEvents.value.length
     }
 }
 
 const prevImage = () => {
-    if (props.events.length > 0) {
-        currentIndex.value = (currentIndex.value - 1 + props.events.length) % props.events.length
+    if (filteredEvents.value.length > 0) {
+        currentIndex.value = (currentIndex.value - 1 + filteredEvents.value.length) % filteredEvents.value.length
     }
 }
 
 const goToImage = (index) => {
-    if (props.events.length > 0) {
+    if (filteredEvents.value.length > 0) {
         currentIndex.value = index
     }
 }
@@ -76,19 +108,29 @@ const getImageUrl = (imagePath) => {
 <template>
     <Head title="Inicio" />
     <Navbar />
-    <div v-if="props.events && props.events.length > 0" class="w-full max-w-4xl mx-auto mt-10">
-        <div class="relative overflow-hidden rounded-xl shadow-lg"
-             @mouseenter="stopAutoplay"
-             @mouseleave="startAutoplay">
+    
+    <div class="w-full max-w-4xl mx-auto mt-6">
+        <div class="mb-4">
+            <input 
+                type="text" 
+                v-model="search" 
+                placeholder="Buscar eventos..." 
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+        </div>
+    </div>
+    
+    <div v-if="filteredEvents.length > 0" class="w-full max-w-4xl mx-auto mt-4">
+        <div class="relative overflow-hidden rounded-xl shadow-lg">
             <img
-                :src="getImageUrl(props.events[currentIndex].image)"
-                :alt="props.events[currentIndex].name"
+                :src="getImageUrl(filteredEvents[currentIndex].image)"
+                :alt="filteredEvents[currentIndex].name"
                 class="w-full h-64 object-cover transition-all duration-500"
             />
 
             <div class="absolute bottom-0 w-full bg-black bg-opacity-50 text-white p-4">
                 <div class="text-center text-lg font-semibold">
-                    {{ props.events[currentIndex].name }} - {{ props.events[currentIndex].category.name }}
+                    {{ filteredEvents[currentIndex].name }} - {{ filteredEvents[currentIndex].category.name }}
                 </div>
                 <!-- <div class="flex justify-center items-center mt-2">
                     <button @click="toggleAutoplay" 
@@ -111,7 +153,7 @@ const getImageUrl = (imagePath) => {
 
         <div class="flex justify-center mt-4 space-x-2">
             <span
-                v-for="(event, index) in props.events"
+                v-for="(event, index) in filteredEvents"
                 :key="event.id"
                 @click="goToImage(index)"
                 class="w-3 h-3 rounded-full cursor-pointer transition-all duration-300"
@@ -123,7 +165,7 @@ const getImageUrl = (imagePath) => {
         </div>
     </div>
     <div v-else class="w-full max-w-4xl mx-auto mt-10 text-center text-gray-600">
-        No hay eventos disponibles
+        {{ props.events && props.events.length > 0 ? 'No se encontraron eventos con ese criterio de búsqueda' : 'No hay eventos disponibles' }}
     </div>
 </template>
   
