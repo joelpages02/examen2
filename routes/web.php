@@ -37,6 +37,6 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('events', EventController::class);
 Route::resource('categories', CategoryController::class);
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::resource('/', HomeController::class);
 
 require __DIR__.'/auth.php';
