@@ -27,6 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Route::middleware(['auth'])->group(function () {
+//     Route::resource('events', EventController::class);
+//     Route::resource('categories', CategoryController::class);
+// });
+
+// Route::resource('events', EventController::class)->middleware('auth');
+// Route::resource('categories', CategoryController::class)->middleware('auth');
+
 Route::resource('events', EventController::class);
 Route::resource('categories', CategoryController::class);
 Route::get('/', [HomeController::class, 'index'])->name('home');
