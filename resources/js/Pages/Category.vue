@@ -19,11 +19,10 @@
             <th class="px-4 py-2 text-left">Acciones</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
-          <tr v-for="category in categories" :key="category.id" class="hover:bg-gray-50">
+        <tbody class="divide-y divide-black">
+          <tr v-for="category in categories" :key="category.id">
             <td class="px-4 py-3">
-              <a :href="route('categories.show', category.id)" 
-                 class="hover:underline">
+              <a :href="route('categories.show', category.id)" >
                 {{ category.name }}
               </a>
             </td>
