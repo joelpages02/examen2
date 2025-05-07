@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Event;
 use App\Models\Home;
 use Illuminate\Http\Request;
@@ -16,9 +17,11 @@ class HomeController extends Controller
     public function index()
     {
         $events = Event::with('category')->get();
+        $categories = Category::all();
         // dd($events);
         return Inertia::render('Welcome', [
-            'events' => $events
+            'events' => $events,
+            'categories' => $categories
         ]);
     }
 
