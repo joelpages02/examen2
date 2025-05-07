@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4">
+    <div>
         <Navbar />
         <h1 class="text-2xl font-bold mb-6">Categoria: {{ category.name }}</h1>
         

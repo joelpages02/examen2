@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4">
+    <div>
         <Navbar />
         <h1 class="text-2xl font-bold mb-4">Event {{ events.name }}</h1>
         <div class="overflow-x-auto">

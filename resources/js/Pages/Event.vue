@@ -1,15 +1,15 @@
 <template>
   <Head title="Eventos" />
-  <div class="p-4">
+  <div>
     <Navbar />
     <h1 class="text-2xl font-bold mb-4">Mis Eventos</h1>
     <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
       <h1>
-        <Link :href="route('events.create')" class="text-blue-500 hover:text-blue-700">Crear</Link>
+        <Link :href="route('events.create')" class="text-black">Crear</Link>
       </h1>
       <div class="w-full sm:w-auto">
         <input type="text" v-model="search" placeholder="Buscar por nombre o categoría..."
-          class="w-full px-4 py-2 border rounded-lg shadow-sm" />
+          class="w-full px-4 py-2 border rounded-lg shadow-sm" aria-label="buscador" />
       </div>
     </div>
     <div class="overflow-x-auto">
@@ -97,8 +97,10 @@ const filteredEvents = computed(() =>
   props.events.filter(event =>
     event.name.toLowerCase().includes(search.value.toLowerCase()) ||
     (event.category && event.category.name &&
-      event.category.name.toLowerCase().includes(search.value.toLowerCase()))
-  )
+      event.category.name.toLowerCase().includes(search.value.toLowerCase())) ||
+      (event.date &&
+        event.date.toLowerCase().includes(search.value.toLowerCase()))
+)
 );
 
 </script>

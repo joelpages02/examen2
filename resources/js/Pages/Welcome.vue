@@ -118,19 +118,19 @@ const getImageUrl = (imagePath) => {
                     class="w-full h-64 object-cover transition-all duration-500"
                 />
 
-                <div class="absolute bottom-0 w-full bg-black bg-opacity-50 text-white p-4">
+                <div class="absolute bottom-0 w-full bg-black bg-opacity-75 text-white p-4">
                     <div class="text-center text-lg font-semibold">
                         {{ props.events[currentIndex].name }} - {{ props.events[currentIndex].category.name }}
                     </div>
                 </div>
 
                 <button @click="prevImage"
-                    class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
+                    class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-75 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
                     ‹
                 </button>
 
                 <button @click="nextImage"
-                    class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
+                    class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-75 text-white px-3 py-1 rounded-full hover:bg-opacity-75">
                     ›
                 </button>
 
@@ -141,7 +141,7 @@ const getImageUrl = (imagePath) => {
                         @click="goToImage(index)"
                         class="w-3 h-3 rounded-full cursor-pointer transition-all duration-300"
                         :class="{
-                            'bg-gray-800': index === currentIndex,
+                            'bg-gray-900': index === currentIndex,
                             'bg-gray-400': index !== currentIndex
                         }"
                     />

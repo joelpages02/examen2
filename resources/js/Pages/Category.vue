@@ -1,12 +1,12 @@
 <template>
   <Head title="Categorias" />
-  <div class="p-4">
+  <div>
     <Navbar />
     <h1 class="text-2xl font-bold mb-4">Mis Categorias</h1>
     
     <div class="flex justify-between items-center mb-6">
       <Link :href="route('categories.create')"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+            class="text-black font-bold py-2 px-4 rounded transition-colors">
         Crear Categoría
       </Link>
     </div>
@@ -30,15 +30,15 @@
             <td class="px-4 py-3">
               <div class="flex gap-4">
                 <Link :href="route('categories.show', category.id)"
-                      class="text-blue-500 hover:text-blue-700">
+                      class="hover:text-blue-700">
                   Ver
                 </Link>
                 <Link :href="route('categories.edit', category.id)"
-                      class="text-green-500 hover:text-green-700">
+                      class="hover:text-green-700">
                   Editar
                 </Link>
                 <button @click="deleteEvent(category.id)"
-                        class="text-red-500 hover:text-red-700">
+                        class="hover:text-red-700">
                   Eliminar
                 </button>
               </div>

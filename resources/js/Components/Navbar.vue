@@ -16,7 +16,7 @@ const toggleMenu = () => {
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
                         <Link href="/" class="text-white font-bold text-xl">
-                            Logo
+                            Inicio
                         </Link>
                     </div>
                     <div class="hidden md:block">
@@ -40,7 +40,8 @@ const toggleMenu = () => {
                 <!-- Botón hamburguesa -->
                 <div class="md:hidden">
                     <button @click="toggleMenu" 
-                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none">
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
+                            aria-label="menumbl">
                         <svg class="h-6 w-6" 
                              :class="{'hidden': isOpen, 'block': !isOpen }"
                              stroke="currentColor" 
